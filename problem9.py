@@ -1,5 +1,6 @@
 # problem9
 from operator import itemgetter
+from functools import cmp_to_key
 import copy
 import sys
 
@@ -13,8 +14,29 @@ def facs(n):
             pass
     return fac
 
+def cmp(l1, l2):
+    lim = max(len(l1), len(l2))
+    for i in range(lim):
+        if l1[i] == l2[i]:
+            if l1[i] == None:
+                return 0
+        elif l1[i] == None:
+            return -1
+        elif l2[i] == None:
+            return 1
+        elif l1[i] < l2[i]:
+            return -1
+        elif l1[i] > l2[i]:
+            return 1
+    return 0
+
 def ptyprint(list_set):
-    print(list_set)
+    p = [list(x) for x in list_set]
+    for x in p:
+        x.sort()
+    p = sorted(p, key=cmp_to_key(cmp))
+    for x in p:
+        print(x)
 
 trans = [set(facs(i)) for i in range(1, 101)]
 
@@ -82,6 +104,6 @@ if __name__=='__main__':
     elif sys.argv[1] == '1':
         print(Lyr1())
     elif sys.argv[1] == '2':
-        print(Lyr2(Lyr1()))
+        ptyprint(Lyr2(Lyr1()))
     else:
-        print(Lyrn(int(sys.argv[1]), Lyr2(Lyr1()), Lyr1()))
+        ptyprint(Lyrn(int(sys.argv[1]), Lyr2(Lyr1()), Lyr1()))
