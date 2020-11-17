@@ -1,6 +1,7 @@
 # problem9
 from operator import itemgetter
 import copy
+import sys
 
 def facs(n):
     fac = [] 
@@ -18,32 +19,32 @@ def ptyprint(list_set):
 trans = [set(facs(i)) for i in range(1, 101)]
 
 # L1
-count = [0] * 101
-for i in trans:
-    for j in i:
-        count[j] = count[j] + 1
-L1 = []
-for i, j in enumerate(count):
-    if j >= 5:
-        L1.append(i)
-# print(L1)
+def Lyr1():
+    L1 = []
+    count = [0] * 101
+    for i in trans:
+        for j in i:
+            count[j] = count[j] + 1
+    for i, j in enumerate(count):
+        if j >= 5:
+            L1.append(i)
+    return L1
 
 # L2
-L2 = []
-cands = []
-for i, j in enumerate(L1):
-    for k in L1[i+1:]:
-        cands.append((j, k))
-# print(cands)
-# print('')
-for i in cands:
-    tmp = 0
-    for j in trans:
-        if (i[0] in j) and (i[1] in j):
-            tmp = tmp + 1
-    if tmp >= 5:
-        L2.append(i)
-# print(L2)
+def Lyr2(L1):
+    L2 = []
+    cands = []
+    for i, j in enumerate(L1):
+        for k in L1[i+1:]:
+            cands.append(set((j, k)))
+    for i in cands:
+        tmp = 0
+        for j in trans:
+            if i < j:
+                tmp = tmp + 1
+        if tmp >= 5:
+            L2.append(i)
+    return L2
 
 
 def Lyrn(n: int, Lyr2: list, Lyr1: list) -> list:
@@ -57,9 +58,9 @@ def Lyrn(n: int, Lyr2: list, Lyr1: list) -> list:
         cands = []
         # 產生候選組合
         for i in Lprev:
-            for j in L1:
+            for j in Lyr1:
                 if j not in i:
-                    k = set(i)
+                    k = i.copy()
                     k.add(j)
                     if k not in cands:
                         cands.append(k)
@@ -75,4 +76,12 @@ def Lyrn(n: int, Lyr2: list, Lyr1: list) -> list:
         Lprev = Ln
     return Ln
 
-print(Lyrn(5, L2, L1))
+if __name__=='__main__':
+    if (len(sys.argv) < 2) or (2 < len(sys.argv)):
+        print('error number of parameter!')
+    elif sys.argv[1] == '1':
+        print(Lyr1())
+    elif sys.argv[1] == '2':
+        print(Lyr2(Lyr1()))
+    else:
+        print(Lyrn(int(sys.argv[1]), Lyr2(Lyr1()), Lyr1()))
