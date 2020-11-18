@@ -35,8 +35,9 @@ def ptyprint(list_set):
     for x in p:
         x.sort()
     p = sorted(p, key=cmp_to_key(cmp))
-    for x in p:
-        print(x)
+    #for x in p:
+     #   print(x)
+    return p
 
 trans = [set(facs(i)) for i in range(1, 101)]
 
@@ -50,6 +51,7 @@ def Lyr1():
     for i, j in enumerate(count):
         if j >= 5:
             L1.append(i)
+    # L1 = [i for i in range(1, 17)]
     return L1
 
 # L2
@@ -101,6 +103,19 @@ def Lyrn(n: int, Lyr2: list, Lyr1: list) -> list:
 if __name__=='__main__':
     if (len(sys.argv) < 2) or (2 < len(sys.argv)):
         print('error number of parameter!')
+    elif sys.argv[1] == 'txt':
+        
+        with open('problem9-1.txt', 'w') as ffile:
+            ffile.write(str(Lyr1()) + '\n')
+        with open('problem9-2.txt', 'w') as ffile:
+            for i in range(0, len(Lyr2(Lyr1()))):
+                ffile.write(str(ptyprint(Lyr2(Lyr1()))[i]) + '\n')
+        
+            for i in range(3, 7):
+                txt_temp = "promble9-" + str(i) + ".txt"
+                with open(txt_temp, 'w') as ffile:
+                    for j in range(0 , len(Lyrn(i, Lyr2(Lyr1()), Lyr1()))):
+                        ffile.write(str(ptyprint(Lyrn(i, Lyr2(Lyr1()), Lyr1()))[j]) + '\n')
     elif sys.argv[1] == '1':
         print(Lyr1())
     elif sys.argv[1] == '2':
